@@ -44,8 +44,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.0.0';
-const versionMsg = 'Released Beta';
+const versionNumber = '1.0.1';
+const versionMsg = 'Added channel join message.';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1543,6 +1543,10 @@ function MessageHandler(context, event) {
                 }else{
                     permError();
                 }
+            }
+        }else{
+            if(event.message === '<@' + event.senderobj.channelid + '|' + event.senderobj.subdisplay + '> has joined the group'){
+                context.sendResponse('Welcome, ' + event.senderobj.display + '! If you\'re new here, please wait for someone to talk to you. Else, enjoy your stay in this new channel!');
             }
         }
     }
