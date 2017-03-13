@@ -44,8 +44,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.0.1';
-const versionMsg = 'Added channel join message.';
+const versionNumber = '1.0.2';
+const versionMsg = 'Added senior moderator role';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -404,11 +404,11 @@ function presentArray(array){
     return makeListVar;
 }
 
-function getAdmins(){
+function getSrModerators(){
     var makeListVar = [];
     for(var x in context.simpledb.botleveldata.members){
         var abc = context.simpledb.botleveldata.members[x];
-        if((isInArray('Admin', abc.backend.role))[0]){
+        if((isInArray('Senior Moderator', abc.backend.role))[0]){
             makeListVar.push(abc.backend.username);
         }
     }
@@ -723,7 +723,7 @@ function MessageHandler(context, event) {
                                     var secondArg = secondParse[0];
                                     
                                     if(canEdit(resultOfPermCheck, firstArg)){
-                                        if(((secondArg === 'Admin' || secondArg === 'Moderator') || (secondArg === 'Trainee' || secondArg === 'Builder')) || secondArg === 'Artist'){
+                                        if(((secondArg === 'Senior Moderator' || secondArg === 'Moderator') || (secondArg === 'Trainee' || secondArg === 'Builder')) || secondArg === 'Artist'){
                                             var targetObj = context.simpledb.botleveldata.members[firstArg];
                                             if(!((isInArray(secondArg, targetObj.backend.role))[0])){
                                                 targetObj.backend.role.push(secondArg);
@@ -732,7 +732,7 @@ function MessageHandler(context, event) {
                                                 context.sendResponse(':warning: Error: That profile already has the role *' + secondArg + '*.');
                                             }
                                         }else{
-                                            context.sendResponse(':warning: Error: Please use a valid role (Admin, Moderator, Trainee, Builder, Artist).');
+                                            context.sendResponse(':warning: Error: Please use a valid role (Senior Moderator, Moderator, Trainee, Builder, Artist).');
                                         }
                                     }else{
                                         context.sendResponse(':warning: Error: You cannot edit the role of this profile.');
