@@ -44,8 +44,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.0.3';
-const versionMsg = 'Fixed typo in $getDirectory';
+const versionNumber = '1.0.4';
+const versionMsg = 'Replaced $addMember and updated commands';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -797,20 +797,20 @@ function MessageHandler(context, event) {
             }
             // --------------------
             
-            else if(event.message.substring(0, 10) === '$addMember'){
+            else if(event.message.substring(0, 15) === '$addSrModerator'){
                 if(addMemberEn){
                     updateLogs(event);
                     updateCounts();
                     
                     if(resultOfPermCheck < 5){
-                        if((event.message[10] === ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 12, event.message.length, '');
+                        if((event.message[15] === ' ' && event.message[16] === '"') && event.message[event.message.length - 1] === '"'){
+                            var firstParse = parseCommand(event.message, 17, event.message.length, '');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
                                 // Profile does not exist, which is good
-                                if(getPermNode(firstArg) !== 5){
-                                    // Person to be added is not a default user
+                                if(getPermNode(firstArg) === 4){
+                                    // Person to be added has mod admin perms
                                     // Constructor Format: (name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNotes, noteNumber, role, username)
                                     
                                     // Remove user from deleted profs if necessary
@@ -824,7 +824,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList = profList;
                                     
                                     // Make profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Admin'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Senior Moderator'], firstArg);
                                     
                                     // Add profile
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
@@ -837,7 +837,7 @@ function MessageHandler(context, event) {
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
                             }
                         }else{
-                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$addMember "username"`');
+                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$addSrModerator "username"`');
                         }
                     }else{
                         permError(resultOfPermCheck);
@@ -881,7 +881,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addMember` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addTrainee`, `$addBuilder`, or `$addArtist` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -931,7 +931,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addMember` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, `$addBuilder`, or `$addArtist` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -981,7 +981,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addMember` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, `$addTrainee`, or `$addArtist` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -1031,7 +1031,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addMember` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, `$addTrainee`, or `$addBuilder` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
