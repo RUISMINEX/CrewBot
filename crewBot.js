@@ -44,8 +44,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.0.2';
-const versionMsg = 'Added senior moderator role';
+const versionNumber = '1.0.3';
+const versionMsg = 'Fixed typo in $getDirectory';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -640,7 +640,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck !== 5){
                         // Sender is not a default user
                         
-                        context.sendResponse('*Admins:*\n' + presentArray(getAdmins().sort()) + '\n\n*Moderators:*\n' + presentArray(getModerators().sort()) + '\n\n*Trainees:*\n' + presentArray(getTrainees().sort()) + '\n\n*Builders:*\n' + presentArray(getBuilders().sort()) + '\n\n*Artists:*\n' + presentArray(getArtists().sort()));
+                        context.sendResponse('*Senior Moderators:*\n' + presentArray(getSrModerators().sort()) + '\n\n*Moderators:*\n' + presentArray(getModerators().sort()) + '\n\n*Trainees:*\n' + presentArray(getTrainees().sort()) + '\n\n*Builders:*\n' + presentArray(getBuilders().sort()) + '\n\n*Artists:*\n' + presentArray(getArtists().sort()));
                     }else{
                         permError(resultOfPermCheck);
                     }
