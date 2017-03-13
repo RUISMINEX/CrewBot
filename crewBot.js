@@ -802,14 +802,14 @@ function MessageHandler(context, event) {
                     updateLogs(event);
                     updateCounts();
                     
-                    if(resultOfPermCheck < 5){
+                    if(resultOfPermCheck === 0){
                         if((event.message[15] === ' ' && event.message[16] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 17, event.message.length, '');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
                                 // Profile does not exist, which is good
-                                if(getPermNode(firstArg) === 4){
+                                if(getPermNode(firstArg) === 1){
                                     // Person to be added has mod admin perms
                                     // Constructor Format: (name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNotes, noteNumber, role, username)
                                     
