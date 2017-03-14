@@ -6,7 +6,7 @@
 
 // Root Panel. Enable/Disable commands here.
 
-// Trainee Commands
+// Default User Commands
 const testEn = true;
 const helpEn =  true;
 const menuEn = true;
@@ -25,7 +25,7 @@ const addBuilderEn = true;
 const addArtistEn = true;
 
 // Multi-Admin Commands
-const addMemberEn = true;
+const addSrModeratorEn = true;
 const editMemberEn = true;
 const addRoleEn = true;
 const delRoleEn = true;
@@ -34,6 +34,7 @@ const addNoteEn = true;
 const editNoteEn = true;
 const delNoteEn = true;
 const getDirectoryEn = true;
+const getTraineesEn = true;
 const searchEn = true;
 
 // Global Admin Commands
@@ -50,7 +51,7 @@ const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
 // This permission can only be hard-coded.
-const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse'];
+const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
 
 var makeListVar = '';
 
@@ -649,6 +650,23 @@ function MessageHandler(context, event) {
                 }
             }
             // --------------------
+            else if(event.message === '$getTrainees'){
+                if(getTraineesEn){
+                    updateLogs(event);
+                    updateCounts();
+                    
+                    if(resultOfPermCheck !== 5){
+                        // Sender is not a default user
+                        
+                        context.sendResponse('*Trainees:*\n' + presentArray(getTrainees().sort()));
+                    }else{
+                        permError(resultOfPermCheck);
+                    }
+                }else{
+                    enError();
+                }
+            }
+            // --------------------
             else if(event.message.substring(0, 7) === '$search'){
                 if(searchEn){
                     updateLogs(event);
@@ -798,7 +816,7 @@ function MessageHandler(context, event) {
             // --------------------
             
             else if(event.message.substring(0, 15) === '$addSrModerator'){
-                if(addMemberEn){
+                if(addSrModeratorEn){
                     updateLogs(event);
                     updateCounts();
                     
@@ -1445,7 +1463,7 @@ function MessageHandler(context, event) {
                                                 
                                             }
                                         }else{
-                                            context.sendResponse(':warning: Error: Cannot change a user\'s permission node to ' + getLetterNode(parseInt(secondArg)));
+                                            context.sendResponse(':warning: Error: Cannot change a user\'s permission node to ' + getLetterNode(parseInt(secondArg)) + '.');
                                         }
                                     }else{
                                         context.sendResponse(':warning: Error: Cannot change permission node of *' + firstArg + '* because he/she is a *' + oldLetterNode + '*.');
