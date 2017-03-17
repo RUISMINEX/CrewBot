@@ -36,6 +36,7 @@ const delNoteEn = true;
 const getDirectoryEn = true;
 const getTraineesEn = true;
 const searchEn = true;
+const renameEn = true;
 
 // Global Admin Commands
 const setPermEn = true;
@@ -45,8 +46,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.0.4';
-const versionMsg = 'Replaced $addMember and updated commands';
+const versionNumber = '1.1.0';
+const versionMsg = 'Added $rename';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -338,7 +339,7 @@ function updateCounts(resultOfPermCheck){
     
 }
 
-// Returns true if sender can edit the target's profile (isn't reliable for default users)
+// Returns true if sender can edit the target's profile
 function canEdit(senderPerm, target){
     var targetPerm = getPermNode(target);
     var targetObj = context.simpledb.botleveldata.members[target];
@@ -528,15 +529,15 @@ function MessageHandler(context, event) {
                     
                     const defaultUserPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`';
                     
-                    const moderatorPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nGet Directory : : `$getDirectory`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
+                    const moderatorPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`';
                     
-                    const artistAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Artist : : `$addArtist`\nGet Directory : : `$getDirectory`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
+                    const artistAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
                     
-                    const builderAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Builder : : `$addBuilder`\nGet Directory : : `$getDirectory`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
+                    const builderAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Builder : : `$addBuilder`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
                     
-                    const modAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nGet Directory : : `$getDirectory`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`';
+                    const modAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`';
                     
-                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nGet Directory : : `$getDirectory`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
+                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
                     
                         // Send commands that are related to permissionNode
                         switch(resultOfPermCheck){
@@ -879,7 +880,7 @@ function MessageHandler(context, event) {
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
                                 // Profile does not exist, which is good
                                 if(getPermNode(firstArg) === 5 || getPermNode(firstArg) === 4){
-                                    // Target is a default user
+                                    // Target is a default user or moderator
                                     // Constructor Format: (name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNotes, noteNumber, role, username)
                                     
                                     // Remove user from deleted profs if necessary
@@ -1123,6 +1124,61 @@ function MessageHandler(context, event) {
                             }
                         }else{
                             context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$editMember "username" "field" "value"`');
+                        }
+                    }else{
+                        permError(resultOfPermCheck);
+                    }
+                }else{
+                    enError();
+                }
+            }
+            // --------------------
+            else if(event.message.substring(0, 7) === '$rename'){
+                if(renameEn){
+                    updateLogs(event);
+                    updateCounts(resultOfPermCheck);
+                    
+                    if(resultOfPermCheck !== 5 && resultOfPermCheck !== 4){
+                        if((event.message[7] === ' ' && event.message[8] === '"') && event.message[event.message.length - 1] === '"'){
+                            var firstParse = parseCommand(event.message, 9, event.message.length, '');
+                            var firstArg = firstParse[0];
+                            var LNC = firstParse[1];
+                            
+                            if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondArg = secondParse[0];
+                                
+                                if(context.simpledb.botleveldata.members[firstArg] !== undefined){
+                                    if(canEdit(resultOfPermCheck, firstArg)){
+                                        if(context.simpledb.botleveldata.members[secondArg] === undefined){
+                                            // Everything should be valid
+                                            
+                                            var oldMemberObj = context.simpledb.botleveldata.members[firstArg];
+                                            
+                                            // Handle profile name list
+                                            context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg));
+                                            context.simpledb.botleveldata.allProfilesList.push(secondArg);
+                                            
+                                            delete context.simpledb.botleveldata.members[firstArg];
+                                            
+                                            oldMemberObj.backend.username = secondArg;
+                                            context.simpledb.botleveldata.members[secondArg] = oldMemberObj;
+                                            
+                                            context.sendResponse('Renamed *' + firstArg + '* to *' + secondArg + '*.');
+                                        }else{
+                                            context.sendResponse(':warning: Error: The profile *' + secondArg + '* already exists.');
+                                        }
+                                    }else{
+                                        context.sendResponse(':warning: Error: You cannot edit this profile with a permission node of *' + getLetterNode(resultOfPermCheck) + '*.');
+                                    }
+                                }else{
+                                    context.sendResponse(':warning: Error: The profile *' + firstArg + '* does not exist.');
+                                }
+                            }else{
+                                context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$rename "username" "value"`');
+                            }
+                        }else{
+                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$rename "username" "value"`');
                         }
                     }else{
                         permError(resultOfPermCheck);
