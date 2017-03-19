@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.1';
-const versionMsg = 'Fixed bug with $getLog adding multiple null logs';
+const versionNumber = '1.3.2';
+const versionMsg = '$getLogs now displays logs in order from latest to earliest';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1597,6 +1597,7 @@ function MessageHandler(context, event) {
                             for(var i in context.simpledb.botleveldata.logs){
                                 allLogs.push(context.simpledb.botleveldata.logs[i]);
                             }
+                            allLogs.reverse();
                             allLogs.length = logCountToShow;
                             context.sendResponse('_Showing last ' + logCountToShow + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                         }
@@ -1616,6 +1617,7 @@ function MessageHandler(context, event) {
                                     for(var i in context.simpledb.botleveldata.logs){
                                         allLogs.push(context.simpledb.botleveldata.logs[i]);
                                     }
+                                    allLogs.reverse();
                                     allLogs.length = firstArg;
                                     context.sendResponse('_Showing last ' + firstArg + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                                 }else{
