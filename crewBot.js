@@ -42,19 +42,18 @@ const renameEn = true;
 const setPermEn = true;
 const delPermEn = true;
 const delMemberEn = true;
-
+const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.2.0';
-const versionMsg = 'Added $getRawData';
+const versionNumber = '1.3.0';
+const versionMsg = 'Added $getLogs';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
 // This permission can only be hard-coded.
 const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
 
-var makeListVar = '';
 
 //   Global Object Constructors
 
@@ -236,10 +235,10 @@ function addLog(event/*BECAUSE EVENT IS NOT YET DEFINED*/, sender, text, timeSen
 
 // Delete Last Log
 function delLastLog(event/*BECAUSE EVENT IS NOT YET DEFINED*/){
-    // IF MORE THAN 100 LOGS
+    // IF MORE THAN MAX COUNT LOGS
     if(context.simpledb.botleveldata.logs.length > logMaxCount){
         var logList = context.simpledb.botleveldata.logs;
-        logList.length = logMaxCount; // Remove logs after 100th one
+        logList.length = logMaxCount; // Remove logs after max count length
         context.simpledb.botleveldata.logs = logList;
         return true;
     }else{
@@ -537,7 +536,7 @@ function MessageHandler(context, event) {
                     
                     const modAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`';
                     
-                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`';
+                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nGet Logs : : `$getLogs`';
                     
                         // Send commands that are related to permissionNode
                         switch(resultOfPermCheck){
@@ -568,15 +567,18 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$getPerm'){
                 if(getPermEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(event.message === '$getPerm'){
+                            updateLogs(event);
+                            updateCounts(resultOfPermCheck);
+                            
                             context.sendResponse('*Permission node for ' + event.senderobj.subdisplay + ':* ' + resultOfPermCheck + ' (' + getLetterNode(resultOfPermCheck) + ')');
                     }
                     if(event.message[8] === ' ' && event.message[9] === '"'){
                         // Check that user isn't default user.
                         if(resultOfPermCheck < 5){
+                            updateLogs(event);
+                            updateCounts(resultOfPermCheck);
+                            
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
@@ -636,11 +638,10 @@ function MessageHandler(context, event) {
             // Multi-Admin Permissions
             else if(event.message === '$getDirectory'){
                 if(getDirectoryEn){
-                    updateLogs(event);
-                    updateCounts();
-                    
                     if(resultOfPermCheck !== 5){
                         // Sender is not a default user
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
                         
                         context.sendResponse('*Senior Moderators:*\n' + presentArray(getSrModerators().sort()) + '\n\n*Moderators:*\n' + presentArray(getModerators().sort()) + '\n\n*Trainees:*\n' + presentArray(getTrainees().sort()) + '\n\n*Builders:*\n' + presentArray(getBuilders().sort()) + '\n\n*Artists:*\n' + presentArray(getArtists().sort()));
                     }else{
@@ -653,11 +654,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message === '$getTrainees'){
                 if(getTraineesEn){
-                    updateLogs(event);
-                    updateCounts();
-                    
                     if(resultOfPermCheck !== 5){
                         // Sender is not a default user
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
                         
                         context.sendResponse('*Trainees:*\n' + presentArray(getTrainees().sort()));
                     }else{
@@ -670,10 +670,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 7) === '$search'){
                 if(searchEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[7] === ' ' && event.message[8] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 9, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -728,10 +728,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$addRole'){
                 if(addRoleEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -775,10 +775,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$delRole'){
                 if(delRoleEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -818,10 +818,10 @@ function MessageHandler(context, event) {
             
             else if(event.message.substring(0, 15) === '$addSrModerator'){
                 if(addSrModeratorEn){
-                    updateLogs(event);
-                    updateCounts();
-                    
                     if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[15] === ' ' && event.message[16] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 17, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -868,10 +868,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 13) === '$addModerator'){
                 if(addModeratorEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 1){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[13] === ' ' && event.message[14] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
                             var firstParse = parseCommand(event.message, 15, event.message.length, '', '"');
@@ -918,10 +918,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 11) === '$addTrainee'){
                 if(addTraineeEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 1){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
                             var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
@@ -968,10 +968,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 11) === '$addBuilder'){
                 if(addBuilderEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 2){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
                             var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
@@ -1018,10 +1018,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 10) === '$addArtist'){
                 if(addArtistEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 3){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[10] === ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
                             var firstParse = parseCommand(event.message, 12, event.message.length, '', '"');
@@ -1068,10 +1068,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 11) === '$editMember'){
                 if(editMemberEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1135,10 +1135,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 7) === '$rename'){
                 if(renameEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5 && resultOfPermCheck !== 4){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[7] === ' ' && event.message[8] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 9, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1190,10 +1190,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 10) === '$delMember'){
                 if(delMemberEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[10] = ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
                             // Correct perms and syntax is our friend :D
                             
@@ -1233,10 +1233,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 11) === '$viewMember'){
                 if(viewMemberEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1303,10 +1303,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$addNote'){
                 if(addNoteEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[8] === ' ' && event.message[9] === '"') && (event.message[event.message.length - 1] === '"' || event.message.substring(event.message.length - 2, event.message.length) === '-h')){
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1359,10 +1359,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$delNote'){
                 if(delNoteEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1410,10 +1410,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 9) === '$editNote'){
                 if(editNoteEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck !== 5){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if((event.message[9] === ' ' && event.message[10] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 11, event.message.length, '', '"');
                             var firstArg = firstParse[0];
@@ -1472,10 +1472,10 @@ function MessageHandler(context, event) {
             // Global Admin Permissions
             else if(event.message.substring(0, 8) === '$setPerm'){
                 if(setPermEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
                         if(event.message[8] === ' ' && event.message[9] === '"'){
                             // Parse First Value
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
@@ -1543,10 +1543,10 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 8) === '$delPerm'){
                 if(delPermEn){
-                    updateLogs(event);
-                    updateCounts(resultOfPermCheck);
-                    
                     if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                    
                         if(event.message[8] === ' ' && event.message[9] === '"'){
                             // Get first (only) arg
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
@@ -1569,6 +1569,53 @@ function MessageHandler(context, event) {
                             }
                         }else{
                             context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$delPerm "username"`');
+                        }
+                    }else{
+                        permError(resultOfPermCheck);
+                    }
+                }else{
+                    enError();
+                }
+            }
+            // --------------------
+            else if(event.message.substring(0, 8) === '$getLogs'){
+                if(getLogsEn){
+                    if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                        
+                        if(event.message === '$getLogs'){
+                            // Send default log count
+                            var allLogs = context.simpledb.botleveldata.logs;
+                            allLogs.length = 25;
+                            context.sendResponse('_Showing last 25 logs..._\n\n>' + allLogs.join('\n\n>'));
+                        }
+                        else if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
+                            var firstArg = firstParse[0];
+                            firstArg = parseInt(firstArg);
+                            if(!(isNaN(firstArg))){
+                                if(firstArg >= 1 && firstArg <= 299){
+                                    
+                                    // Avoids bug where re-defining the length of logs would add extra null's if the length of the log list was less than the requested log count
+                                    if(firstArg > context.simpledb.botleveldata.logs.length){
+                                        firstArg = context.simpledb.botleveldata.logs.length;
+                                    }
+                                    
+                                    var allLogs = [];
+                                    for(var i in context.simpledb.botleveldata.logs){
+                                        allLogs.push(context.simpledb.botleveldata.logs[i]);
+                                    }
+                                    allLogs.length = firstArg;
+                                    context.sendResponse('_Showing last ' + firstArg + ' logs..._\n\n>' + allLogs.join('\n\n>'));
+                                }else{
+                                    context.sendResponse(':warning: Error: Please choose a valid number (1-299). If you would like to view the full list of command logs, please contact Kaleb.');
+                                }
+                            }else{
+                                context.sendResponse(':warning: Error: Please choose a valid number (1-299).');
+                            }
+                        }else{
+                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$getLogs`\n*OR*\n`$getLogs <number>`');
                         }
                     }else{
                         permError(resultOfPermCheck);
