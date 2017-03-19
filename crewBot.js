@@ -258,10 +258,10 @@ function updateLogs(event/*BECAUSE EVENT IS NOT YET DEFINED*/){
 }
 
 // Loop Through Command To Return Parsed Value And Return Last Known Comma Index
-function parseCommand(thingToParse, startingNum, conditionalNum, defaultReturn){
+function parseCommand(thingToParse, startingNum, conditionalNum, defaultReturn, conditionalText){
     var makeListVar = defaultReturn;
     for(var i = startingNum; i < conditionalNum; i++){
-        if(thingToParse[i] !== '"'){
+        if(thingToParse[i] !== conditionalText){
             makeListVar = makeListVar + thingToParse[i];
         }else{
             var lastKnownComma = i; 
@@ -577,7 +577,7 @@ function MessageHandler(context, event) {
                     if(event.message[8] === ' ' && event.message[9] === '"'){
                         // Check that user isn't default user.
                         if(resultOfPermCheck < 5){
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(event.message[event.message.length - 1] === '"'){
@@ -675,12 +675,12 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[7] === ' ' && event.message[8] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 9, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 9, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 
                                 if(firstArg !== 'IP'){
@@ -733,12 +733,12 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
                                 if(context.simpledb.botleveldata.members[firstArg] !== undefined){
-                                    var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                    var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                     var secondArg = secondParse[0];
                                     
                                     if(canEdit(resultOfPermCheck, firstArg)){
@@ -780,11 +780,11 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 if(context.simpledb.botleveldata.members[firstArg] !== undefined){
                                     if(canEdit(resultOfPermCheck, firstArg)){
@@ -823,7 +823,7 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck === 0){
                         if((event.message[15] === ' ' && event.message[16] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 17, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 17, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
@@ -874,7 +874,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 1){
                         if((event.message[13] === ' ' && event.message[14] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
-                            var firstParse = parseCommand(event.message, 15, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 15, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
@@ -924,7 +924,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 1){
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
-                            var firstParse = parseCommand(event.message, 13, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
@@ -974,7 +974,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 2){
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
-                            var firstParse = parseCommand(event.message, 13, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
@@ -1024,7 +1024,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 3){
                         if((event.message[10] === ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
                             // Command is valid and sender is allowed
-                            var firstParse = parseCommand(event.message, 12, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 12, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(!((isInArray(firstArg, context.simpledb.botleveldata.allProfilesList))[0])){
@@ -1073,17 +1073,17 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 13, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 LNC = secondParse[1];3
                                 
                                 if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                    var thirdParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                    var thirdParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                     var thirdArg = thirdParse[0];
                                     LNC = thirdParse[1];
                                     // Syntax is correct
@@ -1140,12 +1140,12 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5 && resultOfPermCheck !== 4){
                         if((event.message[7] === ' ' && event.message[8] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 9, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 9, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 
                                 if(context.simpledb.botleveldata.members[firstArg] !== undefined){
@@ -1197,7 +1197,7 @@ function MessageHandler(context, event) {
                         if((event.message[10] = ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
                             // Correct perms and syntax is our friend :D
                             
-                            var firstParse = parseCommand(event.message, 12, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 12, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(isInArray(firstArg, context.simpledb.botleveldata.allProfilesList)){
@@ -1238,7 +1238,7 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 13, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             if(context.simpledb.botleveldata.members[firstArg] !== undefined){
                                 var targetObj = context.simpledb.botleveldata.members[firstArg];
@@ -1308,12 +1308,12 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[8] === ' ' && event.message[9] === '"') && (event.message[event.message.length - 1] === '"' || event.message.substring(event.message.length - 2, event.message.length) === '-h')){
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 
                                 if(context.simpledb.botleveldata.members[firstArg] !== undefined){
@@ -1364,12 +1364,12 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 
                                 if(context.simpledb.botleveldata.members[firstArg] !== undefined){
@@ -1415,17 +1415,17 @@ function MessageHandler(context, event) {
                     
                     if(resultOfPermCheck !== 5){
                         if((event.message[9] === ' ' && event.message[10] === '"') && event.message[event.message.length - 1] === '"'){
-                            var firstParse = parseCommand(event.message, 11, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 11, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 var LNC = secondParse[1];
                                 
                                 if(event.message[LNC + 1] === ' ' && event.message[LNC + 2] === '"'){
-                                    var thirdParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                    var thirdParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                     var thirdArg = thirdParse[0];
                                     
                                     if(context.simpledb.botleveldata.members[firstArg] !== undefined){
@@ -1478,13 +1478,13 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0){
                         if(event.message[8] === ' ' && event.message[9] === '"'){
                             // Parse First Value
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             var LNC = firstParse[1];
                             
                             if(event.message[LNC + 2] === '"' && event.message[event.message.length - 1] === '"'){
                                 // Parse Second Value
-                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '');
+                                var secondParse = parseCommand(event.message, LNC + 3, event.message.length, '', '"');
                                 var secondArg = secondParse[0];
                                 
                                 // Old Permissions
@@ -1549,7 +1549,7 @@ function MessageHandler(context, event) {
                     if(resultOfPermCheck === 0){
                         if(event.message[8] === ' ' && event.message[9] === '"'){
                             // Get first (only) arg
-                            var firstParse = parseCommand(event.message, 10, event.message.length, '');
+                            var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             
                             if(event.message[event.message.length - 1] === '"'){
@@ -1616,6 +1616,37 @@ function MessageHandler(context, event) {
                     context.sendResponse('Refreshed and updated database.');
                 }else{
                     permError();
+                }
+            }
+            // --------------------
+            else if(event.message.substring(0, 10) === '$getRawObj'){
+                if(event.senderobj.subdisplay === 'kaleb418'){
+                    if((event.message[10] === ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
+                        var firstParse = parseCommand(event.message, 12, event.message.length, '', '"');
+                        var firstArg = firstParse[0];
+                        
+                        var dotCount = 0;
+                        for(i = 0; i < event.message.length; i++){
+                            if(event.message[i] === '.'){
+                                dotCount++;
+                            }
+                        }
+                        
+                        if(dotCount !== 0){
+                            // Need to go deeper in object
+                        }else{
+                            // Only one value to review
+                            if(context.simpledb.botleveldata[firstArg] !== undefined){
+                                context.sendResponse(context.simpledb.botleveldata[firstArg]);
+                            }else{
+                                context.sendResponse(':warning: Error: That location (*context.simpledb.botleveldata.' + firstArg + '*) could not be found.');
+                            }
+                        }
+                    }else{
+                        context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$getRawObj "path"`');
+                    }
+                }else{
+                    permError(resultOfPermCheck);
                 }
             }
         }else{
