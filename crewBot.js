@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.3';
-const versionMsg = '$viewMember now supports using -h';
+const versionNumber = '1.3.4';
+const versionMsg = 'Slight tweak when getting raw data';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1732,7 +1732,11 @@ function MessageHandler(context, event) {
                         }else{
                             // Only one value to review
                             if(context.simpledb.botleveldata[firstArg] !== undefined){
-                                context.sendResponse(context.simpledb.botleveldata[firstArg]);
+                                if((context.simpledb.botleveldata[firstArg]).length !== 0 && context.simpledb.botleveldata[firstArg] !== null){
+                                    context.sendResponse(context.simpledb.botleveldata[firstArg]);
+                                }else{
+                                    context.sendResponse('No data in that path.');
+                                }
                             }else{
                                 context.sendResponse(':warning: Error: The path *context.simpledb.botleveldata.' + firstArg + '* does not exist.');
                             }
