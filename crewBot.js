@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.4';
-const versionMsg = 'Slight tweak when getting raw data';
+const versionNumber = '1.3.5';
+const versionMsg = 'Re-tweaked $getRawData to handle null data';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1724,7 +1724,15 @@ function MessageHandler(context, event) {
                                 }
                             }
                             if(pathExists){
-                                context.sendResponse(currentPath)
+                                if(currentPath !== null){
+                                    if(currentPath.length !== 0){
+                                        context.sendResponse(currentPath);
+                                    }else{
+                                        context.sendResponse('That path is empty.');
+                                    }
+                                }else{
+                                    context.sendResponse('That path is empty.');
+                                }
                             }else{
                                 context.sendResponse(':warning: Error: The path *' + currentPathString + '* does not exist.');
                             }
@@ -1732,10 +1740,14 @@ function MessageHandler(context, event) {
                         }else{
                             // Only one value to review
                             if(context.simpledb.botleveldata[firstArg] !== undefined){
-                                if((context.simpledb.botleveldata[firstArg]).length !== 0 && context.simpledb.botleveldata[firstArg] !== null){
-                                    context.sendResponse(context.simpledb.botleveldata[firstArg]);
+                                if(context.simpledb.botleveldata[firstArg] !== null){
+                                    if((context.simpledb.botleveldata[firstArg]).length !== 0){
+                                        context.sendResponse(context.simpledb.botleveldata[firstArg]);
+                                    }else{
+                                        context.sendResponse('That path is empty.');
+                                    }
                                 }else{
-                                    context.sendResponse('No data in that path.');
+                                    context.sendResponse('That path is empty.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The path *context.simpledb.botleveldata.' + firstArg + '* does not exist.');
