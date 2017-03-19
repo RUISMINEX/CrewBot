@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.0';
-const versionMsg = 'Added $getLogs';
+const versionNumber = '1.3.1';
+const versionMsg = 'Fixed bug with $getLog adding multiple null logs';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1586,9 +1586,19 @@ function MessageHandler(context, event) {
                         
                         if(event.message === '$getLogs'){
                             // Send default log count
-                            var allLogs = context.simpledb.botleveldata.logs;
-                            allLogs.length = 25;
-                            context.sendResponse('_Showing last 25 logs..._\n\n>' + allLogs.join('\n\n>'));
+                            var logCountToShow = 25;
+                            
+                            // Avoids bug where re-defining the length of logs would add extra null's if the length of the log list was less than the requested log count
+                            if(logCountToShow > context.simpledb.botleveldata.logs.length){
+                                logCountToShow = context.simpledb.botleveldata.logs.length;
+                            }
+                                    
+                            var allLogs = [];
+                            for(var i in context.simpledb.botleveldata.logs){
+                                allLogs.push(context.simpledb.botleveldata.logs[i]);
+                            }
+                            allLogs.length = logCountToShow;
+                            context.sendResponse('_Showing last ' + logCountToShow + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                         }
                         else if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
                             var firstParse = parseCommand(event.message, 10, event.message.length, '', '"');
