@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.2';
-const versionMsg = '$getLogs now displays logs in order from latest to earliest';
+const versionNumber = '1.3.3';
+const versionMsg = '$viewMember now supports using -h';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1237,12 +1237,16 @@ function MessageHandler(context, event) {
                         updateLogs(event);
                         updateCounts(resultOfPermCheck);
                         
-                        if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
+                        if((event.message[11] === ' ' && event.message[12] === '"') && (event.message[event.message.length - 1] === '"' || event.message.substring((event.message.length - 4), event.message.length) === '" -h')){
                             var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                             var firstArg = firstParse[0];
                             if(context.simpledb.botleveldata.members[firstArg] !== undefined){
                                 var targetObj = context.simpledb.botleveldata.members[firstArg];
-                                if(canEdit(resultOfPermCheck, firstArg)){
+                                var tempCannotView = false;
+                                if((event.message.substring((event.message.length - 4), event.message.length) === '" -h') && canEdit(resultOfPermCheck, firstArg)){
+                                    tempCannotView = true;
+                                }
+                                if(canEdit(resultOfPermCheck, firstArg) && !tempCannotView){
                                     
                                     //Show private stuff
                                     var makeListVar = [];
@@ -1260,8 +1264,8 @@ function MessageHandler(context, event) {
                                     context.sendResponse('*Showing ' + firstArg + ':*\n\n>*Name:* ' + targetObj.public.name + '\n\n>*IGN:* ' + targetObj.public.IGN + '\n\n>*IP:* ' + targetObj.private.IP + '\n\n>*Role(s):* ' + targetObj.backend.role.join(', ') + '\n\n*---*\n\n*Notes:*\n\n' + commentString + '\n\n_Added by ' + targetObj.public.adder + ' on ' + targetObj.public.dateAdded + '._');
                                     
                                 }else{
-                                    
                                     // Don't show private stuff
+                                    
                                     var makeListVar = [];
                                     for(var i in targetObj.private.allNotes){
                                         var currentNote = targetObj.private.allNotes[i];
@@ -1581,7 +1585,6 @@ function MessageHandler(context, event) {
             else if(event.message.substring(0, 8) === '$getLogs'){
                 if(getLogsEn){
                     if(resultOfPermCheck === 0){
-                        updateLogs(event);
                         updateCounts(resultOfPermCheck);
                         
                         if(event.message === '$getLogs'){
