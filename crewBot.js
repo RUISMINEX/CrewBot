@@ -46,8 +46,8 @@ const delMemberEn = true;
 
 
 // Constants
-const versionNumber = '1.1.0';
-const versionMsg = 'Added $rename';
+const versionNumber = '1.2.0';
+const versionMsg = 'Added $getRawData';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -257,18 +257,18 @@ function updateLogs(event/*BECAUSE EVENT IS NOT YET DEFINED*/){
     return true;
 }
 
-// Loop Through Command To Return Parsed Value And Return Last Known Comma Index
+// Loop Through Command To Return Parsed Value And Return Last Known Conditional Text Index
 function parseCommand(thingToParse, startingNum, conditionalNum, defaultReturn, conditionalText){
     var makeListVar = defaultReturn;
-    for(var i = startingNum; i < conditionalNum; i++){
+    var i = startingNum;
+    for(; i < conditionalNum; i++){
         if(thingToParse[i] !== conditionalText){
             makeListVar = makeListVar + thingToParse[i];
         }else{
-            var lastKnownComma = i; 
             break;
         }
     }
-    return [makeListVar, lastKnownComma];
+    return [makeListVar, i];
 }
 
 // Return all permission nodes a user is in (should just be one unless a bug occured or we are checking roles of a profile)
@@ -1619,14 +1619,14 @@ function MessageHandler(context, event) {
                 }
             }
             // --------------------
-            else if(event.message.substring(0, 10) === '$getRawObj'){
+            else if(event.message.substring(0, 11) === '$getRawData'){
                 if(event.senderobj.subdisplay === 'kaleb418'){
-                    if((event.message[10] === ' ' && event.message[11] === '"') && event.message[event.message.length - 1] === '"'){
-                        var firstParse = parseCommand(event.message, 12, event.message.length, '', '"');
+                    if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
+                        var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                         var firstArg = firstParse[0];
                         
                         var dotCount = 0;
-                        for(i = 0; i < event.message.length; i++){
+                        for(var i = 0; i < event.message.length; i++){
                             if(event.message[i] === '.'){
                                 dotCount++;
                             }
@@ -1634,12 +1634,45 @@ function MessageHandler(context, event) {
                         
                         if(dotCount !== 0){
                             // Need to go deeper in object
+                            var nameList = [];
+                            var locationNum = 0;
+                            var nameCount = dotCount + 1;
+                            var tempParse;
+                            var tempName;
+                            var tempLNC;
+
+                            for(var x = 0; x < nameCount; x++){
+                                tempParse = parseCommand(firstArg, locationNum, firstArg.length, '', '.');
+                                tempName = tempParse[0];
+                                tempLNC = tempParse[1];
+                                nameList.push(tempName);
+                                locationNum = tempLNC + 1;
+                            }
+                            
+                            var pathExists = false;
+                            var currentPath = context.simpledb.botleveldata;
+                            var currentPathString = 'context.simpledb.botleveldata.' + nameList.join('.');
+                            for(var i = 0; i < nameList.length; i++){
+                                if(currentPath[nameList[i]] !== undefined){
+                                    currentPath = currentPath[nameList[i]];
+                                    var pathExists = true;
+                                }else{
+                                    var pathExists = false;
+                                    break;
+                                }
+                            }
+                            if(pathExists){
+                                context.sendResponse(currentPath)
+                            }else{
+                                context.sendResponse(':warning: Error: The path *' + currentPathString + '* does not exist.');
+                            }
+                            
                         }else{
                             // Only one value to review
                             if(context.simpledb.botleveldata[firstArg] !== undefined){
                                 context.sendResponse(context.simpledb.botleveldata[firstArg]);
                             }else{
-                                context.sendResponse(':warning: Error: That location (*context.simpledb.botleveldata.' + firstArg + '*) could not be found.');
+                                context.sendResponse(':warning: Error: The path *context.simpledb.botleveldata.' + firstArg + '* does not exist.');
                             }
                         }
                     }else{
