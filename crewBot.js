@@ -46,8 +46,8 @@ const getLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.6';
-const versionMsg = 'Updated moderator command guide';
+const versionNumber = '1.3.7';
+const versionMsg = 'Fixed issue with $getLogs';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -1600,8 +1600,8 @@ function MessageHandler(context, event) {
                             for(var i in context.simpledb.botleveldata.logs){
                                 allLogs.push(context.simpledb.botleveldata.logs[i]);
                             }
+                            allLogs.length = firstArg;
                             allLogs.reverse();
-                            allLogs.length = logCountToShow;
                             context.sendResponse('_Showing last ' + logCountToShow + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                         }
                         else if((event.message[8] === ' ' && event.message[9] === '"') && event.message[event.message.length - 1] === '"'){
@@ -1620,8 +1620,8 @@ function MessageHandler(context, event) {
                                     for(var i in context.simpledb.botleveldata.logs){
                                         allLogs.push(context.simpledb.botleveldata.logs[i]);
                                     }
-                                    allLogs.reverse();
                                     allLogs.length = firstArg;
+                                    allLogs.reverse();
                                     context.sendResponse('_Showing last ' + firstArg + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                                 }else{
                                     context.sendResponse(':warning: Error: Please choose a valid number (1-299). If you would like to view the full list of command logs, please contact Kaleb.');
