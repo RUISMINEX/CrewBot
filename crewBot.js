@@ -43,11 +43,12 @@ const setPermEn = true;
 const delPermEn = true;
 const delMemberEn = true;
 const getLogsEn = true;
+const addBlackIPEn = true;
 
 
 // Constants
-const versionNumber = '1.3.7';
-const versionMsg = 'Fixed issue with $getLogs';
+const versionNumber = '1.3.8';
+const versionMsg = 'Added IP blacklisting';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -492,6 +493,24 @@ function searchField(field, value, resultOfPermCheck /*BECAUSE RESULTOFPERMCHECK
     }else{
         context.sendResponse(':warning: Error: Please specify a valid subcommand (name, IGN, IP).');
         return null;
+    }
+}
+
+function getIPAlert(userObj){
+    var blackIPList = context.simpledb.botleveldata.blackIPs;
+    var queuedIP = userObj.private.IP;
+    var isBlackIP = false;
+    for(var x in blackIPList){
+        if(queuedIP === blackIPList[x]){
+            var isBlackIP = true;
+            break;
+        }
+    }
+    
+    if(isBlackIP){
+        return '\n\n\n\n*Warning: The IP of this member matches a known blacklisted IP. Please be cautious of this user.*';
+    }else{
+        return '';
     }
 }
 
@@ -1261,7 +1280,7 @@ function MessageHandler(context, event) {
                                     var commentString = '>';
                                     commentString = commentString + makeListVar.join('\n\n>');
                                     
-                                    context.sendResponse('*Showing ' + firstArg + ':*\n\n>*Name:* ' + targetObj.public.name + '\n\n>*IGN:* ' + targetObj.public.IGN + '\n\n>*IP:* ' + targetObj.private.IP + '\n\n>*Role(s):* ' + targetObj.backend.role.join(', ') + '\n\n*---*\n\n*Notes:*\n\n' + commentString + '\n\n_Added by ' + targetObj.public.adder + ' on ' + targetObj.public.dateAdded + '._');
+                                    context.sendResponse('*Showing ' + firstArg + ':*\n\n>*Name:* ' + targetObj.public.name + '\n\n>*IGN:* ' + targetObj.public.IGN + '\n\n>*IP:* ' + targetObj.private.IP + '\n\n>*Role(s):* ' + targetObj.backend.role.join(', ') + '\n\n*---*\n\n*Notes:*\n\n' + commentString + '\n\n_Added by ' + targetObj.public.adder + ' on ' + targetObj.public.dateAdded + '._' + getIPAlert(targetObj));
                                     
                                 }else{
                                     // Don't show private stuff
@@ -1289,7 +1308,7 @@ function MessageHandler(context, event) {
                                         }
                                     }
                                     
-                                    context.sendResponse('*Showing ' + firstArg + ':*\n\n>*Name:* ' + targetObj.public.name + '\n\n>*IGN:* ' + targetObj.public.IGN + '\n\n>*IP:* ' + newIPString + '\n\n>*Role(s):* ' + targetObj.backend.role.join(', ') + '\n\n*---*\n\n*Notes:*\n\n' + commentString + '\n\n_Added by ' + targetObj.public.adder + ' on ' + targetObj.public.dateAdded + '._');
+                                    context.sendResponse('*Showing ' + firstArg + ':*\n\n>*Name:* ' + targetObj.public.name + '\n\n>*IGN:* ' + targetObj.public.IGN + '\n\n>*IP:* ' + newIPString + '\n\n>*Role(s):* ' + targetObj.backend.role.join(', ') + '\n\n*---*\n\n*Notes:*\n\n' + commentString + '\n\n_Added by ' + targetObj.public.adder + ' on ' + targetObj.public.dateAdded + '._' + getIPAlert(targetObj));
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* does not exist.');
@@ -1600,7 +1619,7 @@ function MessageHandler(context, event) {
                             for(var i in context.simpledb.botleveldata.logs){
                                 allLogs.push(context.simpledb.botleveldata.logs[i]);
                             }
-                            allLogs.length = firstArg;
+                            allLogs.length = logCountToShow;
                             allLogs.reverse();
                             context.sendResponse('_Showing last ' + logCountToShow + ' logs..._\n\n>' + allLogs.join('\n\n>'));
                         }
@@ -1640,6 +1659,34 @@ function MessageHandler(context, event) {
                 }
             }
             // --------------------
+            else if(event.message.substring(0, 11) === '$addBlackIP'){
+                if(addBlackIPEn){
+                    if(resultOfPermCheck === 0){
+                        updateLogs(event);
+                        updateCounts(resultOfPermCheck);
+                    
+                        if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
+                            var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
+                            var firstArg = firstParse[0];
+                            
+                            if(!((isInArray(firstArg, context.simpledb.botleveldata.blackIPs))[0])){
+                                context.simpledb.botleveldata.blackIPs.push(firstArg);
+                                context.sendResponse('Added that IP to the list of blacklisted IPs.');
+                            }else{
+                                context.sendResponse(':warning: Error: That IP is already blacklisted.');
+                            }
+                        }else{
+                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$addBlackIP "IP"`');
+                        }
+                    }else{
+                        permError(resultOfPermCheck);
+                    }
+                }else{
+                    enError();
+                }
+                
+            }
+            // --------------------
             
             // Testing Commands - Dangerous
             // These commands do not have enabled/disabled conditionals.
@@ -1664,9 +1711,18 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message === '$resetLogs'){
                 if(event.senderobj.subdisplay === 'kaleb418'){
-                    updateLogs(event);
+                    updateLogs(event); // Creates log just so logs aren't empty
                     context.simpledb.botleveldata.logs.length = 1;
                     context.sendResponse('Reset command logs.');
+                }else{
+                    permError();
+                }
+            }
+            // --------------------
+            else if(event.message === '$resetBlackIPs'){
+                if(event.senderobj.subdisplay === 'kaleb418'){
+                    context.simpledb.botleveldata.blackIPs = [];
+                    context.sendResponse('Reset blacklisted IP list.');
                 }else{
                     permError();
                 }
