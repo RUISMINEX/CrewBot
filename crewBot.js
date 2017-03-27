@@ -857,9 +857,7 @@ function MessageHandler(context, event) {
                                     }
                                     
                                     // Add name of profile to profile list
-                                    var profList = context.simpledb.botleveldata.allProfilesList;
-                                    profList.push(firstArg);
-                                    context.simpledb.botleveldata.allProfilesList = profList;
+                                    context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Make profile
                                     var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Senior Moderator'], firstArg);
@@ -908,9 +906,7 @@ function MessageHandler(context, event) {
                                     }
                                     
                                     // Add name of profile to profile list
-                                    var profList = context.simpledb.botleveldata.allProfilesList;
-                                    profList.push(firstArg);
-                                    context.simpledb.botleveldata.allProfilesList = profList;
+                                    context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
                                     var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Moderator'], firstArg);
@@ -958,9 +954,7 @@ function MessageHandler(context, event) {
                                     }
                                     
                                     // Add name of profile to profile list
-                                    var profList = context.simpledb.botleveldata.allProfilesList;
-                                    profList.push(firstArg);
-                                    context.simpledb.botleveldata.allProfilesList = profList;
+                                    context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
                                     var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Trainee'], firstArg);
@@ -1008,9 +1002,7 @@ function MessageHandler(context, event) {
                                     }
                                     
                                     // Add name of profile to profile list
-                                    var profList = context.simpledb.botleveldata.allProfilesList;
-                                    profList.push(firstArg);
-                                    context.simpledb.botleveldata.allProfilesList = profList;
+                                    context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
                                     var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Builder'], firstArg);
@@ -1058,9 +1050,7 @@ function MessageHandler(context, event) {
                                     }
                                     
                                     // Add name of profile to profile list
-                                    var profList = context.simpledb.botleveldata.allProfilesList;
-                                    profList.push(firstArg);
-                                    context.simpledb.botleveldata.allProfilesList = profList;
+                                    context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
                                     var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Artist'], firstArg);
@@ -1175,7 +1165,7 @@ function MessageHandler(context, event) {
                                             var oldMemberObj = context.simpledb.botleveldata.members[firstArg];
                                             
                                             // Handle profile name list
-                                            context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg));
+                                            context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg), 1);
                                             context.simpledb.botleveldata.allProfilesList.push(secondArg);
                                             
                                             delete context.simpledb.botleveldata.members[firstArg];
@@ -1272,7 +1262,7 @@ function MessageHandler(context, event) {
                                     for(var i in targetObj.private.allNotes){
                                         var currentNote = targetObj.private.allNotes[i];
                                         if(currentNote.isHidden){
-                                            makeListVar.push('`P`   *[N-' + currentNote.ID + ']* ' + currentNote.sender + ' at ' + currentNote.dateSent + ': ' + currentNote.text);
+                                            makeListVar.push('`Private`   *[N-' + currentNote.ID + ']* ' + currentNote.sender + ' at ' + currentNote.dateSent + ': ' + currentNote.text);
                                         }else{
                                             makeListVar.push('*[N-' + currentNote.ID + ']* ' + currentNote.sender + ' at ' + currentNote.dateSent + ': ' + currentNote.text);
                                         }
