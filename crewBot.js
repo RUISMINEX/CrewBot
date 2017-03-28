@@ -53,7 +53,7 @@ const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
 // This permission can only be hard-coded.
-const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
+const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse'];
 
 
 //   Global Object Constructors
@@ -1199,7 +1199,8 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 10) === '$delMember'){
                 if(delMemberEn){
-                    if(resultOfPermCheck === 0){
+                    if(resultOfPermCheck > 4){
+                        // Sender is not moderator nor DU
                         updateLogs(event);
                         updateCounts(resultOfPermCheck);
                         
@@ -1210,22 +1211,26 @@ function MessageHandler(context, event) {
                             var firstArg = firstParse[0];
                             
                             if(isInArray(firstArg, context.simpledb.botleveldata.allProfilesList)){
-                                // User exists
-                                
-                                // Delete from user list
-                                context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg), 1);
-                                
-                                var userToDel = context.simpledb.botleveldata.members[firstArg];
-                                
-                                //Delete profile
-                                delete context.simpledb.botleveldata.members[firstArg];
-                                
-                                if(keepDeletedProfiles){
-                                    // Put user in deleted profile area
-                                    context.simpledb.botleveldata.deletedProfs[firstArg] = userToDel;
+                                if(canEdit(resultOfPermCheck, firstArg)){
+                                    // User exists
+                                    
+                                    // Delete from user list
+                                    context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg), 1);
+                                    
+                                    var userToDel = context.simpledb.botleveldata.members[firstArg];
+                                    
+                                    //Delete profile
+                                    delete context.simpledb.botleveldata.members[firstArg];
+                                    
+                                    if(keepDeletedProfiles){
+                                        // Put user in deleted profile area
+                                        context.simpledb.botleveldata.deletedProfs[firstArg] = userToDel;
+                                    }
+                                    
+                                    context.sendResponse('Deleted the profile *' + firstArg + '*.');
+                                }else{
+                                    context.sendResponse(':warning: Error: You cannot delete this profile.');
                                 }
-                                
-                                context.sendResponse('Deleted the profile *' + firstArg + '*.');
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* does not exist.');
                             }
