@@ -44,11 +44,12 @@ const delPermEn = true;
 const delMemberEn = true;
 const getLogsEn = true;
 const addBlackIPEn = true;
+const searchLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.3.8';
-const versionMsg = 'Added IP blacklisting';
+const versionNumber = '1.4.0';
+const versionMsg = 'Added $findLogs';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -555,7 +556,7 @@ function MessageHandler(context, event) {
                     
                     const modAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`';
                     
-                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nGet Logs : : `$getLogs`';
+                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nGet Logs : : `$getLogs`\nSearch Logs : : `$findLogs`\n\nAdd Blacklisted IP : : `$addBlackIP`';
                     
                         // Send commands that are related to permissionNode
                         switch(resultOfPermCheck){
@@ -1645,6 +1646,47 @@ function MessageHandler(context, event) {
                             }
                         }else{
                             context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$getLogs`\n*OR*\n`$getLogs <number>`');
+                        }
+                    }else{
+                        permError(resultOfPermCheck);
+                    }
+                }else{
+                    enError();
+                }
+            }
+            // --------------------
+            else if(event.message.substring(0, 9) === '$findLogs'){
+                if(searchLogsEn){
+                    if(resultOfPermCheck === 0){
+                        if((event.message[9] === ' ' && event.message[10] === '"') && event.message[event.message.length - 1] === '"'){
+                            var firstParse = parseCommand(event.message, 11, event.message.length, '', '"');
+                            var firstArg = firstParse[0];
+                            
+                            // To avoid directly changing context.simpledb.botleveldata.logs
+                            var commandLogs = [];
+                            for(var i in context.simpledb.botleveldata.logs){
+                                commandLogs.push(context.simpledb.botleveldata.logs[i]);
+                            }
+                            
+                            // Reverse logs
+                            commandLogs.reverse();
+                            
+                            // Search and return logs here
+                            var returnedLogs = [];
+                            for(var x in commandLogs){
+                                if(commandLogs[x].includes(firstArg)){
+                                    returnedLogs.push(commandLogs[x]);
+                                }
+                            }
+                            
+                            // Decide whether to send logs or 'No matched logs.'
+                            if(returnedLogs.length > 0){
+                                context.sendResponse('Logs matching *' + firstArg + '*:\n\n>' + returnedLogs.join('\n\n>'));
+                            }else{
+                                context.sendResponse('No matched logs.');
+                            }
+                        }else{
+                            context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$findLogs "value"`');
                         }
                     }else{
                         permError(resultOfPermCheck);
