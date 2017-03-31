@@ -1200,7 +1200,7 @@ function MessageHandler(context, event) {
             // --------------------
             else if(event.message.substring(0, 10) === '$delMember'){
                 if(delMemberEn){
-                    if(resultOfPermCheck > 4){
+                    if(resultOfPermCheck < 4){
                         // Sender is not moderator nor DU
                         updateLogs(event);
                         updateCounts(resultOfPermCheck);
