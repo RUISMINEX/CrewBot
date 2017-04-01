@@ -48,11 +48,12 @@ const searchLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.4.0';
-const versionMsg = 'Added $findLogs';
+const versionNumber = '1.5.0';
+const versionMsg = 'Added profile logs';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
+const logCommands = true;
 // This permission can only be hard-coded.
 const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse'];
 
@@ -69,7 +70,7 @@ function Note(text, sender, dateSent, isHidden, ID){
 }
 
 // New Member
-function Member(name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNotes, noteNumber, role, username){
+function Member(name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNotes, noteNumber, role, username, logs){
     this.public = {
         name: name,
         IGN: IGN,
@@ -85,7 +86,8 @@ function Member(name, IGN, IP, adder, dateAdded, lastUpdated, allNotes, publicNo
         lastUpdated: lastUpdated,
         noteNumber: noteNumber,
         role: role,
-        username: username
+        username: username,
+        logs: logs
     };
 }
 
@@ -251,9 +253,11 @@ function delLastLog(event/*BECAUSE EVENT IS NOT YET DEFINED*/){
 
 // Update Log List
 function updateLogs(event/*BECAUSE EVENT IS NOT YET DEFINED*/){
-    addLog(event, event.senderobj.subdisplay, event.message, getFullDate(new Date()));
-    if(doDelOldLogs){
-        delLastLog(event);
+    if(logCommands){
+        addLog(event, event.senderobj.subdisplay, event.message, getFullDate(new Date()));
+        if(doDelOldLogs){
+            delLastLog(event);
+        }
     }
     return true;
 }
@@ -766,6 +770,7 @@ function MessageHandler(context, event) {
                                             var targetObj = context.simpledb.botleveldata.members[firstArg];
                                             if(!((isInArray(secondArg, targetObj.backend.role))[0])){
                                                 targetObj.backend.role.push(secondArg);
+                                                targetObj.backend.logs.push({oldValue: null, newValue: secondArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$addRole'});
                                                 context.sendResponse('Added the role *' + secondArg + '* to the profile *' + firstArg + '*.');
                                             }else{
                                                 context.sendResponse(':warning: Error: That profile already has the role *' + secondArg + '*.');
@@ -811,6 +816,7 @@ function MessageHandler(context, event) {
                                         var targetObj = context.simpledb.botleveldata.members[firstArg];
                                         if((isInArray(secondArg, targetObj.backend.role))[0]){
                                             targetObj.backend.role.splice(targetObj.backend.role.indexOf(secondArg), 1);
+                                            targetObj.backend.logs.push({oldValue: secondArg, newValue: null, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$delRole'});
                                             context.sendResponse('Removed role *' + secondArg + '* from the profile *' + firstArg + '*.');
                                         }else{
                                             context.sendResponse(':warning: Error: That profile does not have a role of *' + secondArg + '*.');
@@ -861,7 +867,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Make profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Senior Moderator'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Senior Moderator'], firstArg, []);
                                     
                                     // Add profile
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
@@ -910,7 +916,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Moderator'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Moderator'], firstArg, []);
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
                                     
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
@@ -958,7 +964,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Trainee'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Trainee'], firstArg, []);
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
                                     
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
@@ -1006,7 +1012,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Builder'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Builder'], firstArg, []);
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
                                     
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
@@ -1054,7 +1060,7 @@ function MessageHandler(context, event) {
                                     context.simpledb.botleveldata.allProfilesList.push(firstArg);
                                     
                                     // Add profile
-                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Artist'], firstArg);
+                                    var newProfile = new Member('Unknown', 'Unknown', 'Unknown', event.senderobj.display, getDate(new Date()), getDate(new Date()), {}, {}, 1, ['Artist'], firstArg, []);
                                     context.simpledb.botleveldata.members[firstArg] = newProfile;
                                     
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
@@ -1107,13 +1113,19 @@ function MessageHandler(context, event) {
                                                 // Subcommand is valid
                                                 var targetObj = context.simpledb.botleveldata.members[firstArg];
                                                 if(secondArg === 'name'){
+                                                    var oldValue = targetObj.public.name;
                                                     targetObj.public.name = thirdArg;
+                                                    targetObj.backend.logs.push({oldValue: oldValue, newValue: thirdArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$editMember'});
                                                 }
                                                 if(secondArg === 'IGN'){
+                                                    var oldValue = targetObj.public.IGN;
                                                     targetObj.public.IGN = thirdArg;
+                                                    targetObj.backend.logs.push({oldValue: oldValue, newValue: thirdArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$editMember'});
                                                 }
                                                 if(secondArg === 'IP'){
+                                                    var oldValue = targetObj.private.IP;
                                                     targetObj.private.IP = thirdArg;
+                                                    targetObj.backend.logs.push({oldValue: oldValue, newValue: thirdArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$editMember'});
                                                 }
                                                 
                                                 context.sendResponse('Changed *' + firstArg + '\'s* ' + secondArg + ' to *' + thirdArg + '*.');
@@ -1163,7 +1175,7 @@ function MessageHandler(context, event) {
                                         if(context.simpledb.botleveldata.members[secondArg] === undefined){
                                             // Everything should be valid
                                             
-                                            var oldMemberObj = context.simpledb.botleveldata.members[firstArg];
+                                            var targetObj = context.simpledb.botleveldata.members[firstArg];
                                             
                                             // Handle profile name list
                                             context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg), 1);
@@ -1171,8 +1183,10 @@ function MessageHandler(context, event) {
                                             
                                             delete context.simpledb.botleveldata.members[firstArg];
                                             
-                                            oldMemberObj.backend.username = secondArg;
-                                            context.simpledb.botleveldata.members[secondArg] = oldMemberObj;
+                                            targetObj.backend.username = secondArg;
+                                            context.simpledb.botleveldata.members[secondArg] = targetObj;
+                                            
+                                            targetObj.backend.logs.push({oldValue: firstArg, newValue: secondArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$rename'});
                                             
                                             context.sendResponse('Renamed *' + firstArg + '* to *' + secondArg + '*.');
                                         }else{
@@ -1218,14 +1232,16 @@ function MessageHandler(context, event) {
                                     // Delete from user list
                                     context.simpledb.botleveldata.allProfilesList.splice(context.simpledb.botleveldata.allProfilesList.indexOf(firstArg), 1);
                                     
-                                    var userToDel = context.simpledb.botleveldata.members[firstArg];
+                                    var targetObj = context.simpledb.botleveldata.members[firstArg];
+                                    
+                                    targetObj.backend.logs.push({oldValue: null, newValue: null, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$delMember'});
                                     
                                     //Delete profile
                                     delete context.simpledb.botleveldata.members[firstArg];
                                     
                                     if(keepDeletedProfiles){
                                         // Put user in deleted profile area
-                                        context.simpledb.botleveldata.deletedProfs[firstArg] = userToDel;
+                                        context.simpledb.botleveldata.deletedProfs[firstArg] = targetObj;
                                     }
                                     
                                     context.sendResponse('Deleted the profile *' + firstArg + '*.');
@@ -1355,6 +1371,8 @@ function MessageHandler(context, event) {
                                         
                                         targetObj.backend.noteNumber++;
                                         
+                                        targetObj.backend.logs.push({oldValue: null, newValue: secondArg, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$addNote'});
+                                        
                                         context.sendResponse('Created a note on the profile *' + firstArg + '*.');
                                     }else{
                                         context.sendResponse(':warning: Error: You cannot edit this profile with a permission node of *' + getLetterNode(resultOfPermCheck) + '*.');
@@ -1397,11 +1415,14 @@ function MessageHandler(context, event) {
                                         
                                         if(targetObj.private.allNotes['N-' + secondArg] !== undefined){
                                             
+                                            var oldText = (targetObj.private.allNotes['N-' + secondArg]).text;
                                             delete targetObj.private.allNotes['N-' + secondArg];
                                             
                                             if(targetObj.public.publicNotes[secondArg] !== undefined){
                                                 delete targetObj.public.publicNotes[ 'N-' + secondArg];
                                             }
+                                            
+                                            targetObj.backend.logs.push({oldValue: oldText, newValue: null, editor: event.senderobj.subdisplay, dateEdited: getFullDate(new Date()), action: '$delNote'});
                                             
                                             context.sendResponse('Deleted the note from the profile *' + firstArg + '*.');
                                         }else{
@@ -1729,7 +1750,7 @@ function MessageHandler(context, event) {
             // These commands do not have enabled/disabled conditionals.
             // These commands do not count towards command usage counts.
             // These commands do not count towards logs.
-            // These commands are only available to Kaleb.
+            // These commands are only available to kaleb418.
             
             else if(event.message === '$resetCounts'){
                 if(event.senderobj.subdisplay === 'kaleb418'){
@@ -1768,6 +1789,12 @@ function MessageHandler(context, event) {
             else if(event.message === '$refresh'){
                 if(event.senderobj.subdisplay === 'kaleb418'){
                     // Add stuffs to be updated
+                    
+                    for(var i in context.simpledb.botleveldata.members){
+                        var thisMember = context.simpledb.botleveldata.members[i];
+                        thisMember.backend['logs'] = [];
+                    }
+                    
                     context.sendResponse('Refreshed and updated database.');
                 }else{
                     permError();
