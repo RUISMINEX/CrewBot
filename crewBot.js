@@ -55,7 +55,7 @@ const doDelOldLogs = false;
 const keepDeletedProfiles = true;
 const logCommands = true;
 // This permission can only be hard-coded.
-const globalAdminPerm = ['kaleb418', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
+const globalAdminPerm = ['kaleb', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
 
 
 //   Global Object Constructors
