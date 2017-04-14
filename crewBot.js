@@ -1753,7 +1753,7 @@ function MessageHandler(context, event) {
             // These commands are only available to kaleb418.
             
             else if(event.message === '$resetCounts'){
-                if(event.senderobj.subdisplay === 'kaleb418'){
+                if(event.senderobj.subdisplay === 'kaleb'){
                     context.simpledb.botleveldata.timesused = 0;
                     context.simpledb.botleveldata.timestraineeused = 0;
                     context.simpledb.botleveldata.timesmodused = 0;
@@ -1768,7 +1768,7 @@ function MessageHandler(context, event) {
             }
             // --------------------
             else if(event.message === '$resetLogs'){
-                if(event.senderobj.subdisplay === 'kaleb418'){
+                if(event.senderobj.subdisplay === 'kaleb'){
                     updateLogs(event); // Creates log just so logs aren't empty
                     context.simpledb.botleveldata.logs.length = 1;
                     context.sendResponse('Reset command logs.');
@@ -1778,7 +1778,7 @@ function MessageHandler(context, event) {
             }
             // --------------------
             else if(event.message === '$resetBlackIPs'){
-                if(event.senderobj.subdisplay === 'kaleb418'){
+                if(event.senderobj.subdisplay === 'kaleb'){
                     context.simpledb.botleveldata.blackIPs = [];
                     context.sendResponse('Reset blacklisted IP list.');
                 }else{
@@ -1787,7 +1787,7 @@ function MessageHandler(context, event) {
             }
             // --------------------
             else if(event.message === '$refresh'){
-                if(event.senderobj.subdisplay === 'kaleb418'){
+                if(event.senderobj.subdisplay === 'kaleb'){
                     // Add stuffs to be updated
                     
                     for(var i in context.simpledb.botleveldata.members){
@@ -1802,7 +1802,7 @@ function MessageHandler(context, event) {
             }
             // --------------------
             else if(event.message.substring(0, 11) === '$getRawData'){
-                if(event.senderobj.subdisplay === 'kaleb418'){
+                if(event.senderobj.subdisplay === 'kaleb'){
                     if((event.message[11] === ' ' && event.message[12] === '"') && event.message[event.message.length - 1] === '"'){
                         var firstParse = parseCommand(event.message, 13, event.message.length, '', '"');
                         var firstArg = firstParse[0];
