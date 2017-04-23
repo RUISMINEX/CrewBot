@@ -48,8 +48,8 @@ const searchLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.5.0';
-const versionMsg = 'Added profile logs';
+const versionNumber = '1.5.1';
+const versionMsg = 'Removed artist section in directory';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -667,7 +667,7 @@ function MessageHandler(context, event) {
                         updateLogs(event);
                         updateCounts(resultOfPermCheck);
                         
-                        context.sendResponse('*Senior Moderators:*\n' + presentArray(getSrModerators().sort()) + '\n\n*Moderators:*\n' + presentArray(getModerators().sort()) + '\n\n*Trainees:*\n' + presentArray(getTrainees().sort()) + '\n\n*Builders:*\n' + presentArray(getBuilders().sort()) + '\n\n*Artists:*\n' + presentArray(getArtists().sort()));
+                        context.sendResponse('*Senior Moderators:*\n' + presentArray(getSrModerators().sort()) + '\n\n*Moderators:*\n' + presentArray(getModerators().sort()) + '\n\n*Trainees:*\n' + presentArray(getTrainees().sort()) + '\n\n*Builders:*\n' + presentArray(getBuilders().sort())/* + '\n\n*Artists:*\n' + presentArray(getArtists().sort())*/);
                     }else{
                         permError(resultOfPermCheck);
                     }
