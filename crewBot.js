@@ -48,8 +48,8 @@ const searchLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.5.1';
-const versionMsg = 'Removed artist section in directory';
+const versionNumber = '1.5.2';
+const versionMsg = 'Removed other artist sections';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -528,7 +528,7 @@ function MessageHandler(context, event) {
                 if(testEn){
                     updateLogs(event);
                     
-                    context.sendResponse('Test successful! Message handler is responsive!\n\n*Times Used:* ' + context.simpledb.botleveldata.timesused + '\n*Times Global Admin Used:* ' + context.simpledb.botleveldata.timesadminused + '\n*Times Moderator Admin Used:* ' + context.simpledb.botleveldata.timesmodadminused + '\n*Times Builder Admin Used:* ' + context.simpledb.botleveldata.timesbuilderadminused + '\n*Times Artist Admin Used:* ' + context.simpledb.botleveldata.timesartistadminused + '\n*Times Moderator Used:* ' + context.simpledb.botleveldata.timesmodused + '\n*Times Default User Used:* ' + context.simpledb.botleveldata.timestraineeused + '\n\n*Current Version:* ' + versionNumber + ' (' + versionMsg + ')' + '\n\nThis bot was created and published by <@U1JT6HNE5>. Contact him for any questions or concerns you may have.');
+                    context.sendResponse('Test successful! Message handler is responsive!\n\n*Times Used:* ' + context.simpledb.botleveldata.timesused + '\n*Times Global Admin Used:* ' + context.simpledb.botleveldata.timesadminused + '\n*Times Moderator Admin Used:* ' + context.simpledb.botleveldata.timesmodadminused + '\n*Times Builder Admin Used:* ' + context.simpledb.botleveldata.timesbuilderadminused + '\n*Times Moderator Used:* ' + context.simpledb.botleveldata.timesmodused + '\n*Times Default User Used:* ' + context.simpledb.botleveldata.timestraineeused + '\n\n*Current Version:* ' + versionNumber + ' (' + versionMsg + ')' + '\n\nThis bot was created and published by <@U1JT6HNE5>. Contact him for any questions or concerns you may have.');
                 }else{
                     enError();
                 }
@@ -560,7 +560,7 @@ function MessageHandler(context, event) {
                     
                     const modAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\n\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`';
                     
-                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nAdd Artist : : `$addArtist`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nGet Logs : : `$getLogs`\nSearch Logs : : `$findLogs`\n\nAdd Blacklisted IP : : `$addBlackIP`';
+                    const globalAdminPermList = 'Test Bot : : `$test`\nHelp Message : : `$help`\nMain Menu : : `$menu`\nGet Started : : `$start`\nView Admins : : `$admins`\n\nGet Permissions : : `$getPerm`\nAdd Permissions : : `$setPerm`\nDelete Permissions : : `$delPerm`\n\nAdd Senior Moderator : : `$addSrModerator`\nAdd Moderator : : `$addModerator`\nAdd Trainee : : `$addTrainee`\nAdd Builder : : `$addBuilder`\nEdit Member : : `$editMember`\nRename Member : : `$rename`\nGet Directory : : `$getDirectory`\nGet Trainees : : `$getTrainees`\nSearch Directory : : `$search`\nView Profile : : `$viewMember`\n\nAdd Role : : `$addRole`\nDelete Role : : `$delRole`\n\nAdd Note : : `$addNote`\nEdit Note : : `$editNote`\nDelete Note : : `$delNote`\n\nGet Logs : : `$getLogs`\nSearch Logs : : `$findLogs`\n\nAdd Blacklisted IP : : `$addBlackIP`';
                     
                         // Send commands that are related to permissionNode
                         switch(resultOfPermCheck){
@@ -627,7 +627,7 @@ function MessageHandler(context, event) {
                     updateCounts(resultOfPermCheck);
                     
                     if(event.message === '$start'){
-                        context.sendResponse('Please specify a tag, -t for trainee, -b for builder, and -a for artist. Example: `$start -t`');
+                        context.sendResponse('Please specify a tag, -t for trainee and -b for builder. Example: `$start -t`');
                     }else{
                         if(event.message === '$start -t'){
                             context.sendResponse('Hey there! I would like to welcome you to a program that you will be involved in for the next 1-3 weeks of your Lifeboat experience. Here at Lifeboat, we strive to provide the best server experience possible. We have a player base of 29 million accounts, ranging from very young children to adults and parents. We have over 100 different servers, and over 10 gamemodes to choose from. We are the largest *Minecraft: Pocket Edition* server community, and have been the largest Minecraft network community above all Minecraft servers, PE and PC. Of course, with this huge player fanbase, there comes a huge responsibility. Part of that responsibility is making sure our players are enjoying their time on our servers, and aren\'t experiencing problems. Thus we introduced moderators to our servers.\n\nSomething we must be exceptionally clear on: Moderators do *NOT* exist to boss players around. They do not exist to tell players what to do. They do not exist to make a Lifeboat player\'s experience miserable. They are our line of defense against players who refuse to follow rules. Another thing we try to tell our moderators often is that we must *always* warn with correction before punishment. What good is punishing a player if they don\'t learn anything? We strive to verbally warn and correct a player when they are breaking our rules, so that they learn from their mistakes. Moderator tools are only necessary when a player defies a moderator\'s request to play by the rules of our servers. Then, and only then, are we to use the necessary force, and only in incremental amounts, usually starting with a mute, then working the way up to a 10 minute ban, and so on, if the player refuses to obey after the mute. However, a moderator should never be afraid to use his or her tools at their disposal. If a player continously disobeys correction, we must act according to the severity of the punishment. There are two exceptions to this rule: Hacking and inappropriate names. If you encounter a hacker or a user with a swear word in his name, please ban him for a full day (/lbban <player> 1440), and report him on Redmine.\n\nHere\'s a checklist for you to use, please make sure you complete all of these things before you move on:\n\n- Sign the volunteer agreement form.\n- Have the crew tag added to your Lifeboat account.\n- Have an admin set up a Redmine account for you.\n\n*If you need help with any of the above things, please talk to an administrator. You can see all admins by sending `$admins`.*\n\nHere are the moderator tools you\'ll be working with once you become a full moderator. *Please note:* Trainees do *NOT* have access to these tools; they are here for you to learn them and know how to use them for when you graduate.\n\n`/lbban` - Used to ban a player. Maximum ban time is 1440 minutes (1 day). Usage: `/lbban <player> <time in minutes> <reason>`\n\n`/lbmute` - Used to mute a player. Maximum mute time is 60 minutes. Usage: `/lbmute <player> <time in minutes> <reason>`\n\n`/lbskin` - Used to change the skin of a player to the Alex or Steve counterparts. Usage: `/lbskin <player> [reason]`\n\n`/lbwarn` - Sends a warning to a player. Warning sent: _This is an official warning: We have detected inappropriate behavior from you. Please refrain from breaking the rules, we don’t want to have to ban you!_ Usage: `/lbwarn <player>`\n\n`/lbkick` - Used to disconnect a player from the server. Usage: `/lbkick <player> <reason>`\n\n`/lbunban` Unbans a player. Usage: `/lbunban <player>`\n\n`/lbunmute` - Unmutes a player. Usage: `/lbunmute <player>`\n\n`/move` - Teleports you to the specified player. Usage: `/move <player>`\n\n`/separate` - Bounces two players away from eachother and blocks their chat messages from eachother. Usage: `/separate <player1> <player2>`\n\n`/lbrod` - Gives you a rod, which, when used on a player, shows their true IGN. Usage: `/lbrod`\n\n`/lbstick` - Gives you a rod, which, when used on a player, asks you for a ban time, then bans the player the rod was used on for the specified time in chat. Usage: `/lbstick`\n\nPlease note that the only command you\'ll have when you\'re a trainee is `/d`, which hides your skin and name from others.\n\nTo report players in-game, please use Redmine (crew.lbsg.net). If you need help with reporting, let an administrator know.\n\nLast, but not least, have fun! We\'re glad to have you as part of the volunteer team here, and have high hopes for you. Feel free to watch this introductory greeting, if you wish. <Missing Link>');
@@ -635,9 +635,9 @@ function MessageHandler(context, event) {
                         else if(event.message === '$start -b'){
                             context.sendResponse('Hello, and welcome to the Lifeboat build team! Here at Lifeboat, we strive to provide the best server experience possible. We have a player base of 29 million accounts, ranging from very young children to adults and parents. We have over 100 different servers, and over 10 gamemodes to choose from. We are the largest *Minecraft: Pocket Edition* server community, and have been the largest Minecraft network community above all Minecraft servers, PE and PC. Of course, with this huge player fanbase, there comes a huge responsibility. Part of that responsibility is making sure our players get new and awesome maps to play on frequently. Thus we introduced the build team!\n\nLifeboat’s build team at its core is, well, a team! We work together with the common goal to create awesome environments for our players to experience. Even though there some may have one specific build style that they are good at, or one specific game they make maps for, we all work to improve both the network and our teammates. Creativity and the ability to build well are extremely important for members of the build team, however the ability to work with others is of utmost importance.\n\nWe put a lot of effort into giving our build team the tools to make their lives easier and create an environment where their creativity is not limited. We have both a PE map building server and a PC map building server. You as a builder are welcome to use either server to your liking. We also use Trello for project organization. It is both a web-based and app-based platform so feel free to download it on your phone or just go to https://trello.com.\n\nHere are the action points that you should follow after reading this message.\n\n- Sign the volunteer agreement form.\n- Have the “Map” tag added to your Lifeboat account.\n- Have a Lead Builder introduce you to Trello.\n\n*If you need help with any of the above things, please talk to an administrator. You can see all admins by sending `$admins`.*\n\nFinally, have fun! We are here to create awesome maps for our players to experience and it feels amazing getting to watch people play on your creations. We hope you enjoy it here! ');
                         }
-                        else if(event.message === '$start -a'){
+                        /*else if(event.message === '$start -a'){
                             context.sendResponse('Hello! Welcome to the Lifeboat artists team. Here is a checklist for you to complete to get set up:\n\n- Sign the volunteer agreement form.\n- Have the crew tag added to your Lifeboat account.\n- Have an admin set up a Redmine (crew.lbsg.net) account for you.\n\nIf you have any trouble completing these things, feel free to ask an administrator for help. Send `$admins` to view the admins.');
-                        }
+                        }*/
                         else{
                             context.sendResponse(':warning: Error: Can\'t parse command. Correct syntax:\n`$start`\n*OR*\n`$start <tag>`');
                         }
@@ -776,7 +776,7 @@ function MessageHandler(context, event) {
                                                 context.sendResponse(':warning: Error: That profile already has the role *' + secondArg + '*.');
                                             }
                                         }else{
-                                            context.sendResponse(':warning: Error: Please use a valid role (Senior Moderator, Moderator, Trainee, Builder, Artist).');
+                                            context.sendResponse(':warning: Error: Please use a valid role (Senior Moderator, Moderator, Trainee, Builder).');
                                         }
                                     }else{
                                         context.sendResponse(':warning: Error: You cannot edit the role of this profile.');
@@ -874,7 +874,7 @@ function MessageHandler(context, event) {
                                     
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(firstArg) + '*. Please use `$addModerator`, `$addTrainee`, `$addBuilder`, or `$addArtist` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(firstArg) + '*. Please use `$addModerator`, `$addTrainee`, or `$addBuilder` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -922,7 +922,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addTrainee`, `$addBuilder`, or `$addArtist` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addTrainee`, or `$addBuilder` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -970,7 +970,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, `$addBuilder`, or `$addArtist` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, or `$addBuilder` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -1018,7 +1018,7 @@ function MessageHandler(context, event) {
                                     context.sendResponse('Created the profile *' + firstArg + '*.');
                                     
                                 }else{
-                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, `$addTrainee`, or `$addArtist` to add this profile.');
+                                    context.sendResponse(':warning: Error: *' + firstArg + '* is a *' + getLetterNode(getPermNode(firstArg)) + '*. Please use `$addSrModerator`, `$addModerator`, of `$addTrainee` to add this profile.');
                                 }
                             }else{
                                 context.sendResponse(':warning: Error: The profile *' + firstArg + '* already exists.');
@@ -1034,7 +1034,7 @@ function MessageHandler(context, event) {
                 }
             }
             // --------------------
-            else if(event.message.substring(0, 10) === '$addArtist'){
+            /*else if(event.message.substring(0, 10) === '$addArtist'){
                 if(addArtistEn){
                     if(resultOfPermCheck === 0 || resultOfPermCheck === 3){
                         updateLogs(event);
@@ -1080,7 +1080,7 @@ function MessageHandler(context, event) {
                 }else{
                     enError();
                 }
-            }
+            }*/
             // --------------------
             else if(event.message.substring(0, 11) === '$editMember'){
                 if(editMemberEn){
