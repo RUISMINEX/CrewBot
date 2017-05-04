@@ -55,7 +55,7 @@ const doDelOldLogs = false;
 const keepDeletedProfiles = true;
 const logCommands = true;
 // This permission can only be hard-coded.
-const globalAdminPerm = ['kaleb', 'luke_hoffman', 'jiselleangeles', 'ciamouse', 'brandonvalencia'];
+const globalAdminPerm = ['kaleb', 'luke_hoffman', 'jiselleangeles', 'david', 'brandonvalencia'];
 
 
 //   Global Object Constructors
@@ -354,40 +354,24 @@ function canEdit(senderPerm, target){
             if((isInArray('Moderator', targetObj.backend.role))[0]){
                 if(senderPerm === 1 || senderPerm === 0){
                     canEditThis = true;
-                }else{
-                    if(!canEditThis){
-                        canEditThis = false; // This if/else statement probably doesn't need to be here, but I have no reason to remove it.
-                    }
                 }
             }
             
             if((isInArray('Trainee', targetObj.backend.role))[0]){
                 if(senderPerm === 1 || senderPerm === 0){
                     canEditThis = true;
-                }else{
-                    if(!canEditThis){
-                        canEditThis = false; // This if/else statement probably doesn't need to be here, but I have no reason to remove it.
-                    }
                 }
             }
             
             if((isInArray('Builder', targetObj.backend.role))[0]){
                 if(senderPerm === 2 || senderPerm === 0){
                     canEditThis = true;
-                }else{
-                    if(!canEditThis){
-                        canEditThis = false; // This if/else statement probably doesn't need to be here, but I have no reason to remove it.
-                    }
                 }
             }
             
             if((isInArray('Artist', targetObj.backend.role))[0]){
                 if(senderPerm === 3 || senderPerm === 0){
                     canEditThis = true;
-                }else{
-                    if(!canEditThis){
-                        canEditThis = false; // This if/else statement probably doesn't need to be here, but I have no reason to remove it.
-                    }
                 }
             }
             return canEditThis;
