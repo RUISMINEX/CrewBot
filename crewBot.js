@@ -48,8 +48,8 @@ const searchLogsEn = true;
 
 
 // Constants
-const versionNumber = '1.5.2';
-const versionMsg = 'Removed other artist sections';
+const versionNumber = '1.5.3';
+const versionMsg = 'Patched a bug with roles that come before Builder role';
 const logMaxCount = 100;
 const doDelOldLogs = false;
 const keepDeletedProfiles = true;
@@ -348,38 +348,32 @@ function updateCounts(resultOfPermCheck){
 function canEdit(senderPerm, target){
     var targetPerm = getPermNode(target);
     var targetObj = context.simpledb.botleveldata.members[target];
-    if(((senderPerm === 0) || (senderPerm === 1 && targetPerm === 5)) || (((senderPerm === 2 && targetPerm === 5) || (senderPerm === 3 && targetPerm === 5)) || (senderPerm === 4 && targetPerm === 5))){
-        if(targetPerm === 5 && senderPerm !== 0){
-            var canEditThis = false;
-            if((isInArray('Moderator', targetObj.backend.role))[0]){
-                if(senderPerm === 1 || senderPerm === 0){
-                    canEditThis = true;
-                }
+    if(senderPerm !== 0){
+        if((isInArray('Moderator', targetObj.backend.role))[0]){
+            if(senderPerm === 1 || senderPerm === 0){
+                return true;
             }
-            
-            if((isInArray('Trainee', targetObj.backend.role))[0]){
-                if(senderPerm === 1 || senderPerm === 0){
-                    canEditThis = true;
-                }
+        }
+        
+        if((isInArray('Trainee', targetObj.backend.role))[0]){
+            if(senderPerm === 1 || senderPerm === 0){
+                return true;
             }
-            
-            if((isInArray('Builder', targetObj.backend.role))[0]){
-                if(senderPerm === 2 || senderPerm === 0){
-                    canEditThis = true;
-                }
+        }
+        
+        if((isInArray('Builder', targetObj.backend.role))[0]){
+            if(senderPerm === 2 || senderPerm === 0){
+                return true;
             }
-            
-            if((isInArray('Artist', targetObj.backend.role))[0]){
-                if(senderPerm === 3 || senderPerm === 0){
-                    canEditThis = true;
-                }
+        }
+        
+        if((isInArray('Artist', targetObj.backend.role))[0]){
+            if(senderPerm === 3 || senderPerm === 0){
+                return true;
             }
-            return canEditThis;
-        }else{
-            return true;
         }
     }else{
-        return false;
+        return true;
     }
 }
 
